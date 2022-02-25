@@ -1,0 +1,165 @@
+<html>
+
+<head>
+  <title>Modelling</title>
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <script src="dependencies/jquery/jquery.min.js"></script>
+  <script src="dependencies/vis/vis-network.min.js"></script>
+  <script src="dependencies/jquery/jquery.min.js"></script>
+  <script src="dependencies/html2canvas/html2canvas.min.js"></script>
+  <script src="dependencies/materialize-css/js/materialize.min.js"></script>
+  <script src="dependencies/heatmap.js-2.0.5/build/heatmap.js"></script>
+  <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
+  <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+  <header>
+    <div class="modelling">
+      <div class="logo">
+        <img src="logo.jpg">
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li class="active"><a href="indexModelling.html">Modelling</a></li>
+        <li><a href="indexPrediction.html">Prediction</a></li>
+        <li><a href="indexAbout.html">About</a></li>
+        <li><a href="indexContact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="title">
+      <h3>A Tool for Classification and Prediction of Autism with STA</h3>
+      <h4>Add required eye tracking files for each ASD Group and Control Group to create your modelling set. Files should be in .txt form. You can name your modeling sets.</h4>
+      <!-- Message start -->
+      <!--<h5>Please upload eye tracking data files first.</h5>-->
+      <div class="alert" style="margin: 8px 8px 8px -45px">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        <strong>Important!</strong> Please upload eye tracking data files first.
+      </div>
+      <!-- Message end-->
+      <div class="container" style="height: 95vh">
+        <div class="button-wrap">
+          <br>
+          <label class="new-button"> Upload Files-Autistic Group <input type="file" accept=".txt" name="inputfile" id="inputfile" multiple></label>
+          <br>
+          <br>
+          <label class="new-button"> Upload Files-Control Group <input type="file" accept=".txt" name="inputfile1" id="inputfile1" multiple></label>
+          <br><br>
+          <label class="new-button" style="height: 39px; width: 245px; text-align: center"> Upload Stimuli Image <input type="file" accept=".png, .jpg, .jpeg" name="screenshot" id="screenshot"></label>
+          <br><br>
+          <!-- drop down StimuliName -->
+          <div class="select" style = "width: 15.4em; height: 2.5em; padding-bottom:0px">
+              <select id="selectStimuli">
+                <option>&nbspChoose a Stimuli Name</option>
+              </select>
+          </div>
+          <!-- End drop down -->
+          <br>
+
+          <label>Model: </label>
+          <input type="text" id="model" name="model" disabled><br><br>
+          <input type="checkbox" id="permission" name="permission" value="permission" checked>
+          <label for="permission" id="permissionLabel"> I allow this model to be stored permanently.</label><br><br>
+          <button class="btn" id="myBtn" style="height: 41px; width: 155px; font-size: 16px; background-color: #000000"> Other Settings </button>
+          <button class="btn" id="myBtn1" style="height: 41px; width: 155px; font-size: 16px; background-color: #000000" onclick="javascript:read()"> Create </button>
+          <div>
+          </div>
+          <script src="reader1.js" type="text/javascript"></script>
+        </div>
+      </div>
+    </div>
+
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="close">&times;</span>
+          <p style="color:black">Manage Advanced Settings</p>
+        </div>
+        <form id="staSettings" method="post" action="#">
+          <br><br><br>
+          <div>
+            <label for="screenSize" id="inchLabel">Screen Inch</label>
+            <label for="distance" id="distanceLabel">Distance to Tracker</label>
+            <br>
+            <input type="number" id="screenSize" value=17 min=0>
+            <input type="number" id="distance" value=60 min=0>
+          </div>
+          <br>
+          <br>
+          <div>
+            <label for="daccuracy" id="accuracyLabel">Degree of Accuracy</label>
+            <label for="Tolarance" id="tolaranceLabel">Tolarance Level</label>
+            <br>
+            <input type="number" id="daccuracy" value=0.5 min=0>
+            <input type="number" id="Tolarance" value=1 min=0>
+          </div>
+          <br>
+          <br>
+          <div>
+            <label for="grid" id="gridLabel">Grid</label>
+            <br>
+            <input type="number" id="gridX" value=3 min=1 style="width: 3.5em">
+            <label for="x" id="xLabel">x</label>
+            <input type="number" id="gridY" value=3 min=1 style="width: 3.5em">
+            <input type="checkbox" id="fidelity" name="fidelity" value="fidelity" checked>
+            <label for="fidelity" id="fidelityLabel"> Highest Fidelity</label>
+          </div>
+          <br>
+          <br>
+          <br><br>
+      </div>
+      </form>
+    </div>
+
+    </div>
+
+    <!-- Modal and model inputs' placements and open close functions  -->
+    <script>
+      document.getElementById("permission").style.margin = "0px 0px 0px -20px";
+      document.getElementById("myBtn").style.margin = "0px 0px 0px -30px";
+      document.getElementById("inchLabel").style.margin = "0px 0px 0px 46px";
+      document.getElementById("distanceLabel").style.margin = "0px 0px 0px 167px";
+      document.getElementById("screenSize").style.margin = "0px 0px 0px 46px";
+      document.getElementById("distance").style.margin = "0px 0px 0px 82px";
+      document.getElementById("accuracyLabel").style.margin = "0px 0px 0px 46px";
+      document.getElementById("tolaranceLabel").style.margin = "0px 0px 0px 115px";
+      document.getElementById("daccuracy").style.margin = "0px 0px 0px 46px";
+      document.getElementById("Tolarance").style.margin = "0px 0px 0px 82px";
+      document.getElementById("fidelity").style.margin = "0px 0px 0px 172px";
+      document.getElementById("fidelityLabel").style.margin = "0px 0px 0px 2px";
+      document.getElementById("gridLabel").style.margin = "0px 0px 0px 46px";
+      document.getElementById("gridX").style.margin = "0px 0px 0px 47px";
+      document.getElementById("gridY").style.margin = "0px 0px 0px 0px";
+
+      // Get the modal
+      var modal = document.getElementById("myModal");
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks the button, open the modal
+      btn.onclick = function() {
+        modal.style.display = "block";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+        modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    </script>
+  </header>
+</body>
+</html>

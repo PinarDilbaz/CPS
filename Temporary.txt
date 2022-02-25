@@ -1,0 +1,34 @@
+FixationIndex	Timestamp	FixationDuration	MappedFixationPointX	MappedFixationPointY	StimuliName
+0	0	78	601	481	https://www.xxx.com./
+1	78	239	418	478	https://www.xxx.com./
+2	318	817	536	450	https://www.xxx.com./
+3	1135	140	538	346	https://www.xxx.com./
+4	1274	498	669	189	https://www.xxx.com./
+5	1773	160	487	164	https://www.xxx.com./
+6	2092	100	473	182	https://www.xxx.com./
+7	2192	219	264	142	https://www.xxx.com./
+8	2411	179	643	200	https://www.xxx.com./
+9	2590	159	686	205	https://www.xxx.com./
+10	2750	559	502	768	https://www.xxx.com./
+11	3308	179	406	607	https://www.yyy.com./
+12	3487	219	374	285	https://www.yyy.com./
+13	3707	439	486	183     https://www.yyy.com./
+14	4145	199	265	132	https://www.yyy.com./
+15	4345	159	717	288	https://www.yyy.com./
+16	4504	279	868	520	https://www.yyy.com./
+17	4783	299	669	595	https://www.yyy.com./
+18	5082	179	625	582	https://www.yyy.com./
+19	5262	199	371	579	https://www.zzz.com./
+20	5461	478	481	177	https://www.zzz.com./
+21	5940	179	198	278	https://www.zzz.com./
+22	6119	259	207	160	https://www.zzz.com./
+23	6378	239	786	192	https://www.zzz.com./
+24	6618	319	892	219	https://www.zzz.com./
+25	6936	259	938	251	https://www.zzz.com./
+26	7196	239	843	611	https://www.zzz.com./
+27	7435	339	840	512	https://www.zzz.com./
+28	7774	241	535	706	https://www.zzz.com./
+29	8015	217	488	246	https://www.zzz.com./
+30	8233	259	537	189	https://www.zzz.com./
+
+*Note: These values and stimuli names are temporary values and urls.

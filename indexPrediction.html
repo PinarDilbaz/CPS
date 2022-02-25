@@ -1,0 +1,255 @@
+<html>
+
+<head>
+  <title>Prediction</title>
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+  <script src="dependencies/jquery/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="dependencies/vistaplus.css">
+</head>
+
+<body>
+  <header>
+    <div class="prediction" id="main">
+      <div class="logo">
+        <img src="logo.jpg">
+      </div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="indexModelling.html">Modelling</a></li>
+        <li class="active"><a href="indexPrediction.html">Prediction</a></li>
+        <li><a href="indexAbout.html">About</a></li>
+        <li><a href="indexContact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="title">
+      <h3>A Tool for Classification and Prediction of Autism with STA</h3>
+      <h4>Add required eye tracking files for new participant. Files should be in .txt form. Select the modelling set to be compared.</h4>
+      <div class="content">
+        <div class="container">
+          <div class="button-wrap">
+            <br>
+            <input type="text" id="inputfile" style="display:none">
+            <input type="text" id="inputfile1" style="display:none">
+            <input type="text" id="screenshot" style="display:none">
+            <label class="new-button"> Upload Files-Unknown User <input type="file" accept=".txt" name="inputfile3" id="inputfile3"></label>
+            <br><br>
+            <div class="select">
+                <select id="selectModel">
+                  <option>&nbspChoose a Model</option>
+                </select>
+            </div>
+            <button id="myBtn" style="height: 36px; width: 70px; font-size: 16px; margin: -47px 0px 0px 170px"> Models</button><br><br>
+            <button class="btn" id="myBtn1" style="height: 41px; width: 120px; font-size: 16px; background-color: #000000" onclick="javascript:newComerRead(inputfile3)"> Submit </button>
+            <div>
+            </div>
+            <script src="reader1.js" type="text/javascript"></script>
+          </div>
+        </div>
+        <div id="myModal" class="modal">
+          <!-- Modal content -->
+          <div class="modal-content" id="widthChange">
+            <div class="modal-header">
+              <span class="close">&times;</span>
+            </div>
+            <br><br>
+            <div id="list"></div>
+            <br><br>
+            <div id="noRecord" style='display: none'>
+              <h2 id="noRecord_h"style="margin: -80px 0px 0px 0px; color: black"></h2>
+              <br><br><br>
+              <br><br><br>
+              <br><br><br>
+              <div>
+              </div>
+            </div>
+        </div>
+
+        </div>
+        <section id="output" class="section" style="display: none">
+          <h5>Output</h1>
+            <a href="#main" class="btn" id="backTop">Back To Top</a>
+            <a href="indexModelling.html" class="btn" id="backModelling">Create New Model</a>
+
+            <div id="mynetwork">
+            </div>
+            <br><br>
+            <div id="buttons">
+              <input type="checkbox" id="autisticBox" name="autisticBox" value="autisticBox" style="color:#D20606" checked>
+              <label for="autistic" id="autisticLabel" style="color:#D20606; font-size:19px"> Autistic</label>
+
+              <input type="checkbox" id="controlBox" name="controlBox" value="controlBox" style="color:#093E91" checked>
+              <label for="control" id="controlLabel" style="color:#2243B6; font-size:19px"> Control (Not Autistic)</label>
+
+              <input type="checkbox" id="unknownBox" name="unknownBox" value="unknownBox" style="color:#15910A" checked>
+              <label for="unknown" id="unknownLabel" style="color:#15910A; font-size:19px"> Unknown</label>
+            </div>
+            <br>
+            <div id=animate>
+              <label for="speed" id="speedLabel" style="font-size:19px"> Speed: </label>
+              <input type="number" id="speedValue" value=1 min=0 style="width: 3.5em">
+              <label for="sec" id="secLabel" style="font-size:19px"> sec </label>
+              <button id="animatebtn" style="height: 30px; width: 95px; font-size: 16px; background-color: #000000; color: #fff; font-family: Century Gothic" onclick="javascript:animation()"> Animate </button>
+            </div>
+            <script src="dependencies/vis/vis-network.min.js"></script>
+            <script src="dependencies/html2canvas/html2canvas.min.js"></script>
+            <script src="dependencies/materialize-css/js/materialize.min.js"></script>
+            <script src="dependencies/heatmap.js-2.0.5/build/heatmap.js"></script>
+            <script src="dependencies/heatmap.js-2.0.5/build/heatmap.min.js"></script>
+        </section>
+      </div>
+  </header>
+
+  <!-- Jquery CDN Link -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript">
+    document.getElementById("autisticLabel").style.margin = "0px 0px 0px 1px";
+    document.getElementById("controlBox").style.margin = "0px 0px 0px 40px";
+    document.getElementById("controlLabel").style.margin = "20px 0px 0px 1px";
+    document.getElementById("unknownBox").style.margin = "0px 0px 0px 50px";
+    document.getElementById("unknownLabel").style.margin = "20px 0px 0px 1px";
+    document.getElementById("myBtn1").style.margin = "0px 0px 0px 56px";
+
+    var select = document.getElementById("selectModel");
+    var getDataURl = 'https://cpsrestfulapi.herokuapp.com/models/';
+    fetch(getDataURl)
+      .then(model => model.json())
+      .then((json) => {
+        objectStr = JSON.stringify(json);
+        //console.log(objectStr);
+        var objectList0 = JSON.parse(objectStr);
+        var objectList = objectList0.results;
+        //console.log(objectList[0]);
+        for (var i = 0; i < objectList.length; i++) {
+          console.log(objectList[i]);
+          var opt = objectList[i].model_name;
+          var el = document.createElement("option");
+          el.textContent = opt;
+          el.value = opt;
+          select.appendChild(el);
+        }
+      });
+
+    backTop.addEventListener("click", function() {
+      function scrollTopAnimated() {
+        $("html, body").animate({
+          scrollTop: "0"
+        }, 500);
+      }
+    });
+    $('input[name=autisticBox]').change(function() {
+      if ($(this).is(':checked')) {
+        displayCustomizedPaths();
+      } else {
+        displayCustomizedPaths();
+      }
+    });
+
+    $('input[name=controlBox]').change(function() {
+      if ($(this).is(':checked')) {
+        displayCustomizedPaths();
+      } else {
+        displayCustomizedPaths();
+      }
+    });
+
+    $('input[name=unknownBox]').change(function() {
+      if ($(this).is(':checked')) {
+        displayCustomizedPaths();
+      } else {
+        displayCustomizedPaths();
+      }
+    });
+
+    function TableAdd(table, data) {
+      var row = "<tr>";
+      for (var i = 0; i < data.length; i++) {
+        row = row + "<td>" + data[i] + "</td>";
+      }
+      row = row + "</tr>";
+      document.getElementById(table).getElementsByTagName("tbody")[0].innerHTML += row;
+    }
+
+    function CreateTable(id, where, data) {
+      var table = "<table id='" + id + "'><thead><tr>";
+      for (var i = 0; i < data.length; i++) {
+        table = table + "<th>" + data[i] + "</th>";
+      }
+      table = table + "</tr></thead><tbody></tbody></table>";
+      where.innerHTML += table;
+    }
+
+    var visit = 0;
+    var size;
+    var prop = 0;
+    var btn = document.getElementById("myBtn");
+    // Get the modal
+    var modal = document.getElementById("myModal");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {
+      var modelsArray = new Array();
+      var objectStr = '';
+      var json = new Object();
+      modal.style.display = "block";
+      var getDataURl = 'https://cpsrestfulapi.herokuapp.com/models/';
+      fetch(getDataURl)
+        .then(model => model.json())
+        .then((json) => {
+          console.log(json);
+          objectStr = JSON.stringify(json);
+          console.log(objectStr);
+          var objectDB0 = JSON.parse(objectStr);
+          console.log(objectDB);
+          var objectDB = objectDB0.results;
+          console.log(objectDB);
+          if(visit == 0){
+            size = objectDB.length;
+            visit++;
+          }
+          for(var i = 0; i < size; i++){
+            modelsArray.push(objectDB[i]);
+          }
+          var element = document.getElementById("list");
+          while(element.firstChild) {
+                element.removeChild(element.firstChild);
+            }
+          if(modelsArray.length == 0){
+            document.getElementById("noRecord").style.display = "inline-block";
+            document.getElementById("noRecord_h").innerHTML = "No Record Found!";
+          }
+          else{
+            modal.style.paddingTop = "100px";
+            document.getElementById("widthChange").style.width = "70%";
+            CreateTable("myTable", element, ["Model Name","Stimuli Name","Grid(X)","Grid(Y)", "Image Size (Width)", "Image Size (Height)"]);
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
+            list.appendChild(document.createElement('br'));
+            for(var i = 0; i < modelsArray.length; i++){
+              prop += 1500*(i+1);
+              modal.style.height = prop;
+              TableAdd("myTable", [modelsArray[i].model_name, modelsArray[i].stimuli_name, modelsArray[i].grid_x, modelsArray[i].grid_y, modelsArray[i].width, modelsArray[i].height]);
+              list.appendChild(document.createElement('br'));
+              list.appendChild(document.createElement('br'));
+            }
+          }
+        });
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
